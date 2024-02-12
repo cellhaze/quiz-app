@@ -2,22 +2,27 @@
 const startBtn = document.getElementById("start");
 const nextBtn = document.getElementById("next");
 const qContainer = document.getElementById("q-container");
-const aContainer = document.getElementById("answers");
+const aContainer = document.getElementById("answer-buttons");
+const questionElement = document.getElementById("question");
 
 // Variables for shuffled array of quetstions and current question index
 let shuffledQuestions, currentQIndex;
 
 startBtn.addEventListener("click", startGame);
+nextBtn.addEventListener("click", () => {
+  currentQIndex++;
+  setNextQuestion();
+});
 
 // Start Game
 function startGame() {
   console.log("Game started");
   // Hide start button
   startBtn.classList.add("hide");
+  qContainer.classList.remove("hide");
 
   // Reveal next button and question
   nextBtn.classList.remove("hide");
-  qContainer.classList.remove("hide");
 
   // 50% change number will be positive, or negative
   shuffledQuestions = questions.sort(() => Math.random() - 0.5);
@@ -38,7 +43,8 @@ function selectAnswer() {
 
 function showQuestion(question) {
   // updates question text element
-  qContainer.innerText = question.question;
+  //something in this line is making the child elements disappear
+  questionElement.innerText = question.question;
 
   question.answers.forEach((answer) => {
     const button = document.createElement("button");
