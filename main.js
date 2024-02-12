@@ -32,13 +32,42 @@ function startGame() {
 }
 
 function setNextQuestion() {
-  console.log("Next question");
+  //clears previous answers
+  resetState();
   // picks random question from shuffled array
   showQuestion(shuffledQuestions[currentQIndex]);
 }
 
-function selectAnswer() {
-  console.log("Answer selected");
+function selectAnswer(e) {
+  const selectedBtn = e.target;
+  const correct = selectedBtn.dataset.correct;
+  setStatusClass(document.body, correct);
+  Array.from(aContainer.children).forEach((button) => {
+    setStatusClass(button, button.dataset.correct);
+  });
+
+  //if there are more questions, show next button
+  if (shuffledQuestions.length > currentQIndex + 1) {
+    nextBtn.classList.remove("hide");
+  } else {
+    //otherwise, show the (re)start button
+    startBtn.innerText = "Restart";
+    startBtn.classList.remove("hide");
+  }
+}
+
+function setStatusClass(element, correct) {
+  clearStatusClass(element);
+  if (correct) {
+    element.classList.add("correct");
+  } else {
+    element.classList.add("wrong");
+  }
+}
+
+function clearStatusClass(element) {
+  element.classList.remove("correct");
+  element.classList.remove("wrong");
 }
 
 function showQuestion(question) {
@@ -59,6 +88,15 @@ function showQuestion(question) {
   });
 }
 
+function resetState() {
+  //hide next button
+  nextBtn.classList.add("hide");
+  //while there is a child, remove the element
+  while (aContainer.firstChild) {
+    aContainer.removeChild(aContainer.firstChild);
+  }
+}
+
 const questions = [
   {
     question: `What is 2 + 2?`,
@@ -68,6 +106,42 @@ const questions = [
       { text: `22`, correct: false },
       { text: `2`, correct: false },
       { text: `0`, correct: false },
+    ],
+  },
+  {
+    question: `What is 2 * 2?`,
+    answers: [
+      { text: `4`, correct: true },
+      { text: `22`, correct: false },
+      { text: `2`, correct: false },
+      { text: `0`, correct: false },
+    ],
+  },
+  {
+    question: `What is 2 / 2?`,
+    answers: [
+      { text: `1`, correct: true },
+      { text: `22`, correct: false },
+      { text: `2`, correct: false },
+      { text: `0`, correct: false },
+    ],
+  },
+  {
+    question: `What is 2 - 2?`,
+    answers: [
+      { text: `4`, correct: false },
+      { text: `22`, correct: false },
+      { text: `2`, correct: false },
+      { text: `0`, correct: true },
+    ],
+  },
+  {
+    question: `What is the capital of France?`,
+    answers: [
+      { text: `London`, correct: false },
+      { text: `Paris`, correct: true },
+      { text: `Berlin`, correct: false },
+      { text: `Madrid`, correct: false },
     ],
   },
 ];
